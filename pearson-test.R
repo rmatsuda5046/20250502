@@ -1,8 +1,8 @@
 ###相関分析
-PC <- read.csv("pca-v2.csv", header = TRUE, na.strings = "NA")
+data <- read.csv("pca-v2.csv", header = TRUE, na.strings = "NA")
 
 #正規性の確認
-shapiro.test(PC$L.sha)
+shapiro.test(data$L.sha)
 
 #Pearson test
-cor.test(PC$Lat, PC$diatom.micro.chao, method = "pearson")
+cor.test(data$Lat, data$diatom.micro.chao, method = "pearson")
