@@ -1,6 +1,5 @@
-#パッケージのインストール
-library(CCA)
-library(CCP)
+library("CCA")
+library("CCP")
 library("ggplot2")	
 library("GGally")	
 library("cowplot") 	
@@ -12,30 +11,29 @@ library("ggthemes")
 ###除歪対応分析（DCA）と正準相関分析（CCA）の方法
 ###欠損値を補完する方法があるらしいが、今回は欠損値を含むサンプルを除いた。
 
-##データのインポート
+##Importing data
 data <- read.csv("OTU_table_micro.csv")
 para <- read.csv("parameter_micro.csv")
 
-##文字列の削除
+##remove the column of character
 data_r = data[,3:ncol(data)]	
 para_r = para[,2:ncol(para)]
 
 
-###歪除対応分析, DCA1のAxis lengthsが4以下ならPCAやRDA解析、4以上ならCCA解析、要は目的変数を環境パラメータで説明する時に2次元で説明できるのかそうでないのかの判別
+###Decision Curve Analysis
 decorana(veg=data_r)
 
 # Hellinger transformation
 rared <- decostand(data_r, method = "hellinger")
 para_r <- as.data.frame(scale(para_r)) 
 
-###Canonical coresspondence analysis
+###Canonical correspondence analysis
 result.cca <- cca(rared ~ ., data=para_r)
 
-###CCA解析結果の詳細
 summary(result.cca)
 
 
-###CCAの解析結果をggplotで表現する
+###Making the plot
 #extracting the data as data frame; env data
 veg_1 = as.data.frame(result.cca$CCA$biplot)
 veg_1["env"] = row.names(veg_1)
@@ -47,14 +45,14 @@ veg_2$Zone = data$Zone
 
 fill_order <- c("STFZ", "SAFZ", "PFZ", "AAZ", "SPZ")
 
-#環境変数の有意差検定
+#Test of significant environmental parameters
 anova_result <- anova(result.cca, by = "term")
 
 #extracting significant environmental parameter（p value < 0.05）
 significant_vars <- rownames(anova_result)[anova_result$`Pr(>F)` < 0.05]
 veg_1_significant <- veg_1[veg_1$env %in% significant_vars, ]
 
-#CCAの作図
+#CCA plot
 plot <- ggplot() + 
   geom_point(data = veg_2, aes(x = CCA1, y = CCA2, shape = factor(Zone, fill_order), color = "red"), alpha = 0.9) +
   geom_point(data = veg_1_significant, aes(x = CCA1, y = CCA2), size = 0.6, alpha = 0.9, color = "black") +
