@@ -8,17 +8,13 @@ library("ggbiplot")
 library("ggthemes") 
 
 
-###除歪対応分析（DCA）と正準相関分析（CCA）の方法
-###欠損値を補完する方法があるらしいが、今回は欠損値を含むサンプルを除いた。
-
 ##Importing data
-data <- read.csv("OTU_table_micro.csv")
-para <- read.csv("parameter_micro.csv")
+data <- read.csv("OTU_table.csv")
+para <- read.csv("parameter.csv")
 
 ##remove the column of character
 data_r = data[,3:ncol(data)]	
 para_r = para[,2:ncol(para)]
-
 
 ###Decision Curve Analysis
 decorana(veg=data_r)
@@ -71,4 +67,4 @@ plot <- ggplot() +
         legend.text = element_text(size = 10), 
         axis.title = element_text(size = 10))
 
-ggsave("plot_micro_250409.pdf", plot, height=6, width=9, unit="cm")
+ggsave("plot.pdf", plot, height=6, width=9, unit="cm")
