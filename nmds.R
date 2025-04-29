@@ -5,7 +5,7 @@ library("cowplot")
 library("vegan") 	
 
 #Importing the original data
-data <- read.csv("um22.csv", header = TRUE, na.strings = "NA")
+data <- read.csv("OTU_table.csv", header = TRUE, na.strings = "NA")
 nmds = data[,4:ncol(data)]
 
 #Rarefied the reads
@@ -34,7 +34,7 @@ fill_order <- c("STFZ", "SAFZ", "PFZ", "AAZ", "SPZ")
 plot = ggplot(data = data.scores, aes(x = NMDS1, y = NMDS2, colour = Size, shape = factor(Zone, fill_order))) +
   geom_point(size = 3) + theme_bw(12)+theme(axis.ticks=element_line(colour = "black"), axis.text=element_text(colour = "black"), legend.position = ("right"), legend.text = element_text(size = 10), axis.title = element_text(size = 10))+labs(color = "Size", shape = "Zone")+scale_colour_manual(values = c("red", "blue"))
 
-ggsave("plot_all_250326.pdf", plot_all, height=8, width=11, unit="cm")
+ggsave("plot.pdf", plot_all, height=8, width=11, unit="cm")
 
 
 #PERMANOVA test
